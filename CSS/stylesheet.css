@@ -1,0 +1,35 @@
+body {
+    color: #777;
+}
+
+h1 {
+    font-family: Marvel;
+    font-size: 24px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 700;
+    line-height: 26.4px;
+}
+
+p { font-family: Marvel;
+    font-size: 14px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+.container {
+    font-family: Marvel;
+    padding: 80px 120px;
+}
+
+.navbar {
+    font-family: Marvel;
+    margin-bottom: 0;
+    background-color: #2d2d30;
+    border: 0;
+    font-size: 11px !important;
+    letter-spacing: 4px;
+    opacity: 0.9;
+}
