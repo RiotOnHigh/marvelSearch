@@ -21,7 +21,23 @@ p { font-family: Marvel;
 
 .container {
     font-family: Marvel;
-    padding: 80px 120px;
+    padding: 40px 80px;
+}
+
+li {
+    font-family: Marvel;
+    float: left;
+}
+
+.modal-header, h4, .close {
+    background-color: #333;
+    color: #fff !important;
+    text-align: center;
+    font-size: 30px;
+}
+
+.modal-header, .modal-body {
+    padding: 40px 50px;
 }
 
 .navbar {
