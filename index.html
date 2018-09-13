@@ -13,6 +13,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!-- Link to Marvel Font -->
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Marvel" />
+    <!-- Link to JS for search -->
+    <script type="text/javascript" src="JS/characterSearch.js"></script>
+
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="50">
 
@@ -37,9 +40,21 @@
     </div>
 </nav>
 
-<div class="container">
-    <h1>Testing</h1>
-    <p>Test.</p>
+<!-- Search form for API requests -->
+<div class="container" id="characterSearchContainer">
+    <h1>Character Search</h1>
+    <form action="">
+        <div class="form-group">
+            <label for="characterSearch">Please Enter A Character Name:</label>
+            <input type="text" class="form-control" id="characterSearch" placeholder="Enter Character">
+            <label class="error" for="characterSearch" id="characterSearch_error">This field is required.</label>
+            <small id="characterHelp" class="form-text text-muted">This will return a list of Characters with that begin with the entered text.</small>
+        </div>
+        <button type="submit" class="button">Submit</button>
+    </form>
+
+    <br/>
+    <div id="results"></div>
 </div>
 
 </body>
