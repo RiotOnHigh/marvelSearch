@@ -1,4 +1,5 @@
 var notFound = new String("http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available").valueOf();
+var desriptionString;
 
 $(function(){
 
@@ -17,6 +18,14 @@ $(function(){
 
             for(var i=0; i<resultsLen; i++){
                 var imageCheck = new String(results[i].thumbnail.path).valueOf();
+                var descrCheck = new String(results[i].description).valueOf();
+                if (descrCheck != "") {
+                    desriptionString = results[i].description;
+                    console.log("1");
+                }
+                else {
+                    desriptionString = "No Description Available";
+                }
                 if(imageCheck != notFound) {
                     var imgPath = results[i].thumbnail.path + '/standard_fantastic.' + results[i].thumbnail.extension;
                 }
@@ -36,7 +45,7 @@ $(function(){
                               '</div>\n' +
                               '<div class="modal-body">\n' +
                               '<h3>Biography</h3>'
-                              +results[i].description+
+                              +desriptionString+
                               '</div>\n' +
                               '<div class="modal-footer">\n' +
                               '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\n' +
