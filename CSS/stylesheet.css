@@ -43,7 +43,7 @@ button.link {
 }
 
 .modal-header, h4, .close {
-    background-color: #333;
+    background-color: red;
     color: #fff !important;
     text-align: center;
     font-size: 30px;
@@ -61,4 +61,8 @@ button.link {
     font-size: 11px !important;
     letter-spacing: 4px;
     opacity: 0.9;
+}
+
+.bg-company-red {
+    background-color: red;
 }
