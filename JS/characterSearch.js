@@ -6,11 +6,26 @@ $(document).ready(function() {
 
     //Submit button to search for a character
     $("#submit").click(function() {
-        $("#results").empty();
+        if ($('#characterSearch').val() == '') {
+            alert('Input can not be left blank');
+        }
+        else {
         var characterName = $('#characterSearch').val();
+        $("#results").empty();
         characterSearch(characterName, processCharacterSearch);
-        //console.log(characterResults);
+        }
     });
+
+});
+
+//function needed for DOM to see button within a modal being pressed
+$(document).on("click", ".comicInfo", function(event){
+
+    var comicID = $(this).val();
+    comicSearch(comicID, processComicSearch);
+
+});
+
 
 
 
@@ -22,12 +37,15 @@ function characterSearch(name, callback) {
         // well as a time stamp. All three of these varibles would be used in unison and encrypted in MD5
         apikey: '3996055df50e231be7c25a0aee2e71a0'
     })
-        .then(function( response ) {
+        .done(function( response ) {
 
             characterResults = response.data.results;
-            console.log(characterResults);
+            //console.log(characterResults);
             callback(characterResults);
 
+        })
+        .fail(function(err) {
+           console.log(err);
         });
 
 }
@@ -40,9 +58,14 @@ function comicSearch(id, callback) {
         // well as a time stamp. All three of these varibles would be used in unison and encrypted in MD5
         apikey: '3996055df50e231be7c25a0aee2e71a0'
     })
-        .then(function( response ) {
-            comicResults = response.data.results;
+        .done(function( response ) {
+
+            comicResults = response.data.results[0];
             callback(comicResults);
+
+        })
+        .fail(function(err) {
+            console.log(err);
         });
 
 }
@@ -55,8 +78,11 @@ function eventSearch(id) {
         // well as a time stamp. All three of these varibles would be used in unison and encrypted in MD5
         apikey: '3996055df50e231be7c25a0aee2e71a0'
     })
-        .then(function( response ) {
+        .done(function( response ) {
             eventResults = response.data.results;
+        })
+        .fail(function(err) {
+            console.log(err);
         });
 
 }
@@ -64,6 +90,7 @@ function eventSearch(id) {
 //Draws results of the search on the DOM
 function processCharacterSearch(characterResult) {
     var resultsLen = characterResults.length;
+    console.log(characterResults);
     var output = '<ul class="list-group">';
     for (var i = 0; i < resultsLen; i++) {
 
@@ -102,10 +129,17 @@ function processCharacterSearch(characterResult) {
         else {
             for (var x = 0; x < comicLen; x++) {
                 output +=
+                    '<div class="row">' +
+                    '<div class="col-sm-8"> ' +
                     '<li>' +
                     '<p>' + characterResults[i].comics.items[x].name + '</p>' +
                     //'<p>' + characterResults[i].comics.items[x].name + '</p>' +
-                    '</li>\n' ;
+                    '</li>\n' +
+                    '</div>' +
+                    '<div id="info" class="col-sm-4">' +
+                    '<button data-toggle="modal" href="#stack2" class="comicInfo" value="'+ characterResults[i].comics.items[x].resourceURI  +'">More Info?</button>' +
+                    '</div>' +
+                    '</div>' ;
 
             }
         }
@@ -141,4 +175,38 @@ function processCharacterSearch(characterResult) {
     output += '</ul>';
     $('#results').append(output);
 }
-});
+
+function processComicSearch(comicResults) {
+
+    console.log(comicResults);
+    var location = comicResults.name;
+    console.log(location);
+    var comicOutput =
+        '<ul class="list-group">' +
+        '<div class="modal fade" id="' + comicResults.title + 'Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">\n' +
+        '<div class="modal-dialog" role="document">\n' +
+        '<div class="modal-content">\n' +
+        '<div class="modal-header">\n' +
+        '<h5 class="modal-title" id="exampleModalLabel">' + comicResults.title + '</h5>\n' +
+        '<button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
+        '<span aria-hidden="true">&times;</span>\n' +
+        '</button>\n' +
+        '</div>\n' +
+        '<div class="modal-body">\n' +
+        '<h2>Biography</h2>'
+        + comicResults.description +
+        '<br/>' +
+        '</div>\n' +
+        '<div class="modal-footer">\n' +
+        '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\n' +
+        '</div>\n' +
+        '</div>\n' +
+        '</div>\n' +
+        '</div>' +
+    '</ul>';
+
+    $('#info').append(comicOutput);
+
+
+
+}

@@ -66,3 +66,7 @@ button.link {
 .bg-company-red {
     background-color: red;
 }
+
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: red !important;
+}
