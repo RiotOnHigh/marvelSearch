@@ -26,7 +26,20 @@ p { font-family: Marvel;
 
 li {
     font-family: Marvel;
-    float: left;
+}
+
+button.link {
+    background: none;
+    border: none;
+}
+
+/* Important part */
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
 }
 
 .modal-header, h4, .close {
