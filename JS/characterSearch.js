@@ -22,9 +22,19 @@ $(document).ready(function() {
 $(document).on("click", ".comicInfo", function(event){
 
     var comicID = $(this).val();
-    comicSearch(comicID, processComicSearch);
+    $("#info").empty();
+    comicSearch(comicID, processSearch);
 
 });
+
+$(document).on("click", ".eventInfo", function(event){
+
+    var eventID = $(this).val();
+    $("#info").empty();
+    comicSearch(eventID, processSearch);
+
+});
+
 
 
 
@@ -136,8 +146,8 @@ function processCharacterSearch(characterResult) {
                     //'<p>' + characterResults[i].comics.items[x].name + '</p>' +
                     '</li>\n' +
                     '</div>' +
-                    '<div id="info" class="col-sm-4">' +
-                    '<button data-toggle="modal" href="#stack2" class="comicInfo" value="'+ characterResults[i].comics.items[x].resourceURI  +'">More Info?</button>' +
+                    '<div class="col-sm-4">'+
+                    '<button class="comicInfo" value="'+ characterResults[i].comics.items[x].resourceURI  +'">More Info?</button>' +
                     '</div>' +
                     '</div>' ;
 
@@ -154,10 +164,16 @@ function processCharacterSearch(characterResult) {
         else {
             if (eventLen > 5) eventLen = 5;
             for (var y = 0; y < eventLen; y++) {
-                output +=
+                output += '<div class="row">' +
+                    '<div class="col-sm-8"> ' +
                     '<li>'+
                      '<p>'+ characterResults[i].events.items[y].name +'</p>' +
-                    '</li>\n' ;
+                    '</li>\n' +
+                    '</div>' +
+                    '<div class="col-sm-4">'+
+                    '<button class="eventInfo" value="'+ characterResults[i].events.items[y].resourceURI  +'">More Info?</button>' +
+                    '</div>' +
+                    '</div>' ;
 
             }
         }
@@ -172,29 +188,30 @@ function processCharacterSearch(characterResult) {
             '</div>';
 
     }
-    output += '</ul>';
+    output += '<div id="info" class="col-sm-4">' +
+        '</div>' +
+        '</ul>';
     $('#results').append(output);
 }
 
-function processComicSearch(comicResults) {
+function processSearch(searchResults) {
 
-    console.log(comicResults);
-    var location = comicResults.name;
-    console.log(location);
-    var comicOutput =
-        '<ul class="list-group">' +
-        '<div class="modal fade" id="' + comicResults.title + 'Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">\n' +
+    console.log(searchResults);
+    //var location = comicResults.name;
+    //console.log(location);
+    var searchOutput =
+        '<div class="modal fade" id="comicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">\n' +
         '<div class="modal-dialog" role="document">\n' +
         '<div class="modal-content">\n' +
         '<div class="modal-header">\n' +
-        '<h5 class="modal-title" id="exampleModalLabel">' + comicResults.title + '</h5>\n' +
+        '<h5 class="modal-title" id="exampleModalLabel">' + searchResults.title + '</h5>\n' +
         '<button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
         '<span aria-hidden="true">&times;</span>\n' +
         '</button>\n' +
         '</div>\n' +
         '<div class="modal-body">\n' +
         '<h2>Biography</h2>'
-        + comicResults.description +
+        + searchResults.description +
         '<br/>' +
         '</div>\n' +
         '<div class="modal-footer">\n' +
@@ -202,11 +219,11 @@ function processComicSearch(comicResults) {
         '</div>\n' +
         '</div>\n' +
         '</div>\n' +
-        '</div>' +
-    '</ul>';
+        '</div>' ;
 
-    $('#info').append(comicOutput);
 
+    $('#info').append(searchOutput);
+    $('#comicModal').modal();
 
 
 }
