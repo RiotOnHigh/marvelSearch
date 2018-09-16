@@ -2,6 +2,7 @@ var characterResults = {};
 var comicResults = {};
 var eventResults = {};
 
+//Button click functions
 $(document).ready(function() {
 
     //Submit button to search for a character
@@ -15,11 +16,11 @@ $(document).ready(function() {
         }
     });
 
+    //function needed for DOM to see button within a modal being pressed
     $(document).on("click", ".eventInfo", function(event) {
 
         var eventID = $(this).val();
         $("#info").empty();
-        console.log("1");
         eventSearch(eventID, processSearch);
 
     });
@@ -35,7 +36,7 @@ $(document).ready(function() {
 
 });
 
-
+//Makes request to Marvel API with callback function to render info on DOM
 function characterSearch(name, callback) {
 
     var marvelAPI = 'https://gateway.marvel.com/v1/public/characters?nameStartsWith=' + name;
@@ -47,7 +48,6 @@ function characterSearch(name, callback) {
         .done(function(response) {
 
             characterResults = response.data.results;
-            //console.log(characterResults);
             callback(characterResults);
 
         })
@@ -57,6 +57,7 @@ function characterSearch(name, callback) {
 
 }
 
+//Makes request to Marvel API with callback function to render info on DOM
 function comicSearch(id, callback) {
 
     var marvelAPI = id;
@@ -77,6 +78,7 @@ function comicSearch(id, callback) {
 
 }
 
+//Makes request to Marvel API with callback function to render info on DOM
 function eventSearch(id, callback) {
 
     var marvelAPI = id;
@@ -87,7 +89,6 @@ function eventSearch(id, callback) {
     })
         .done(function(response) {
             eventResults = response.data.results[0];
-            //console.log(eventResults);
             callback(eventResults);
         })
         .fail(function(err) {
@@ -99,8 +100,8 @@ function eventSearch(id, callback) {
 //Takes the information from character search and renders the results on screen
 //This creates buttons with image and name of characters from results and creates modals that will display info on character
 function processCharacterSearch(characterResult) {
+
     var resultsLen = characterResults.length;
-    console.log(characterResults);
     var output = '<ul class="list-group">';
     for (var i = 0; i < resultsLen; i++) {
 
@@ -196,9 +197,6 @@ function processCharacterSearch(characterResult) {
 //Inserts information from API into info div of searches
 function processSearch(searchResults) {
 
-    console.log(searchResults);
-    //var location = comicResults.name;
-    //console.log(location);
     var searchOutput =
         '<div class="modal fade" id="comicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">\n' +
         '<div class="modal-dialog" role="document">\n' +
