@@ -8,46 +8,43 @@ $(document).ready(function() {
     $("#submit").click(function() {
         if ($('#characterSearch').val() == '') {
             alert('Input can not be left blank');
+        } else {
+            var characterName = $('#characterSearch').val();
+            $("#results").empty();
+            characterSearch(characterName, processCharacterSearch);
         }
-        else {
-        var characterName = $('#characterSearch').val();
-        $("#results").empty();
-        characterSearch(characterName, processCharacterSearch);
-        }
+    });
+
+    $(document).on("click", ".eventInfo", function(event) {
+
+        var eventID = $(this).val();
+        $("#info").empty();
+        console.log("1");
+        eventSearch(eventID, processSearch);
+
+    });
+
+    //function needed for DOM to see button within a modal being pressed
+    $(document).on("click", ".comicInfo", function(event) {
+
+        var comicID = $(this).val();
+        $("#info").empty();
+        comicSearch(comicID, processSearch);
+
     });
 
 });
 
-//function needed for DOM to see button within a modal being pressed
-$(document).on("click", ".comicInfo", function(event){
-
-    var comicID = $(this).val();
-    $("#info").empty();
-    comicSearch(comicID, processSearch);
-
-});
-
-$(document).on("click", ".eventInfo", function(event){
-
-    var eventID = $(this).val();
-    $("#info").empty();
-    comicSearch(eventID, processSearch);
-
-});
-
-
-
-
 
 function characterSearch(name, callback) {
 
-    var marvelAPI = 'https://gateway.marvel.com/v1/public/characters?nameStartsWith='+name;
-    $.getJSON( marvelAPI, {
+    var marvelAPI = 'https://gateway.marvel.com/v1/public/characters?nameStartsWith=' + name;
+    $.getJSON(marvelAPI, {
         //As this is a client side application these is no need for the private API key only the public will be used. However if this was created using any sever side technologies the private API key must be used as
         // well as a time stamp. All three of these varibles would be used in unison and encrypted in MD5
         apikey: '3996055df50e231be7c25a0aee2e71a0'
     })
-        .done(function( response ) {
+        .done(function(response) {
 
             characterResults = response.data.results;
             //console.log(characterResults);
@@ -55,7 +52,7 @@ function characterSearch(name, callback) {
 
         })
         .fail(function(err) {
-           console.log(err);
+            console.log(err);
         });
 
 }
@@ -63,12 +60,12 @@ function characterSearch(name, callback) {
 function comicSearch(id, callback) {
 
     var marvelAPI = id;
-    $.getJSON( marvelAPI, {
+    $.getJSON(marvelAPI, {
         //As this is a client side application these is no need for the private API key only the public will be used. However if this was created using any sever side technologies the private API key must be used as
         // well as a time stamp. All three of these varibles would be used in unison and encrypted in MD5
         apikey: '3996055df50e231be7c25a0aee2e71a0'
     })
-        .done(function( response ) {
+        .done(function(response) {
 
             comicResults = response.data.results[0];
             callback(comicResults);
@@ -80,16 +77,18 @@ function comicSearch(id, callback) {
 
 }
 
-function eventSearch(id) {
+function eventSearch(id, callback) {
 
-    var marvelAPI = 'https://gateway.marvel.com/v1/public/comics/'+id;
-    $.getJSON( marvelAPI, {
+    var marvelAPI = id;
+    $.getJSON(marvelAPI, {
         //As this is a client side application these is no need for the private API key only the public will be used. However if this was created using any sever side technologies the private API key must be used as
         // well as a time stamp. All three of these varibles would be used in unison and encrypted in MD5
         apikey: '3996055df50e231be7c25a0aee2e71a0'
     })
-        .done(function( response ) {
-            eventResults = response.data.results;
+        .done(function(response) {
+            eventResults = response.data.results[0];
+            //console.log(eventResults);
+            callback(eventResults);
         })
         .fail(function(err) {
             console.log(err);
@@ -97,7 +96,8 @@ function eventSearch(id) {
 
 }
 
-//Draws results of the search on the DOM
+//Takes the information from character search and renders the results on screen
+//This creates buttons with image and name of characters from results and creates modals that will display info on character
 function processCharacterSearch(characterResult) {
     var resultsLen = characterResults.length;
     console.log(characterResults);
@@ -128,10 +128,9 @@ function processCharacterSearch(characterResult) {
             '</button>\n' +
             '</div>\n' +
             '<div class="modal-body">\n' +
-            '<h2>Biography</h2>'
-            + desriptionString +
+            '<h2>Biography</h2>' + desriptionString +
             '<br/>' +
-            '<h2>Top Comics</h2>'+
+            '<h2>Top Comics</h2>' +
             '<ol>';
 
         var comicLen = characterResults[i].comics.items.length;
@@ -146,17 +145,17 @@ function processCharacterSearch(characterResult) {
                     //'<p>' + characterResults[i].comics.items[x].name + '</p>' +
                     '</li>\n' +
                     '</div>' +
-                    '<div class="col-sm-4">'+
-                    '<button class="comicInfo" value="'+ characterResults[i].comics.items[x].resourceURI  +'">More Info?</button>' +
+                    '<div class="col-sm-4">' +
+                    '<button class="comicInfo" value="' + characterResults[i].comics.items[x].resourceURI + '">More Info?</button>' +
                     '</div>' +
-                    '</div>' ;
+                    '</div>';
 
             }
         }
 
         output += '</ol>' +
             '<h2>Top Events</h2>' +
-            '<ol>' ;
+            '<ol>';
 
 
         var eventLen = characterResults[i].events.items.length;
@@ -166,14 +165,14 @@ function processCharacterSearch(characterResult) {
             for (var y = 0; y < eventLen; y++) {
                 output += '<div class="row">' +
                     '<div class="col-sm-8"> ' +
-                    '<li>'+
-                     '<p>'+ characterResults[i].events.items[y].name +'</p>' +
+                    '<li>' +
+                    '<p>' + characterResults[i].events.items[y].name + '</p>' +
                     '</li>\n' +
                     '</div>' +
-                    '<div class="col-sm-4">'+
-                    '<button class="eventInfo" value="'+ characterResults[i].events.items[y].resourceURI  +'">More Info?</button>' +
+                    '<div class="col-sm-4">' +
+                    '<button class="eventInfo" value="' + characterResults[i].events.items[y].resourceURI + '">More Info?</button>' +
                     '</div>' +
-                    '</div>' ;
+                    '</div>';
 
             }
         }
@@ -194,6 +193,7 @@ function processCharacterSearch(characterResult) {
     $('#results').append(output);
 }
 
+//Inserts information from API into info div of searches
 function processSearch(searchResults) {
 
     console.log(searchResults);
@@ -210,8 +210,7 @@ function processSearch(searchResults) {
         '</button>\n' +
         '</div>\n' +
         '<div class="modal-body">\n' +
-        '<h2>Biography</h2>'
-        + searchResults.description +
+        '<h2>Biography</h2>' + searchResults.description +
         '<br/>' +
         '</div>\n' +
         '<div class="modal-footer">\n' +
@@ -219,7 +218,7 @@ function processSearch(searchResults) {
         '</div>\n' +
         '</div>\n' +
         '</div>\n' +
-        '</div>' ;
+        '</div>';
 
 
     $('#info').append(searchOutput);
