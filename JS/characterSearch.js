@@ -196,7 +196,7 @@ function processCharacterSearch(characterResult) {
     output += '<div id="info" class="col-sm-4">' +
         '</div>'
         + modalOutput +
-        '</div>';
+        '</div>'; 
     $('#results').append(output);
 }
 
