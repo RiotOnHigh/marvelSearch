@@ -102,7 +102,7 @@ function eventSearch(id, callback) {
 function processCharacterSearch(characterResult) {
 
     var resultsLen = characterResults.length;
-    var output = '<ul class="list-group">';
+    var output = '<div class="container-fluid">';
     for (var i = 0; i < resultsLen; i++) {
 
         var imageCheck = new String(characterResults[i].thumbnail.path).valueOf();
@@ -117,9 +117,14 @@ function processCharacterSearch(characterResult) {
         if (descrCheck != "") desriptionString = characterResults[i].description;
         else desriptionString = "Sorry, No Description Available";
 
-        output += '<button type="button" data-toggle="modal" data-target="#' + characterResults[i].id + 'Modal"><li class="list-group-item"><img src="' + imgPath + '"><br>' + characterResults[i].name + '</li></button>\n' +
-            '<!-- Modal -->\n' +
-            '<div class="modal fade" id="' + characterResults[i].id + 'Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">\n' +
+        output += '<div class="thumbnail">' +
+            '<img src="' + imgPath + '" alt="pic" width="400" height="300">' +
+            '<p><strong>'+ characterResults[i].name +'</strong></p>' +
+            '<button type="button" data-toggle="modal" data-target="#' + characterResults[i].id + 'Modal">About</button>' +
+            '</div>' +
+            '</div>';
+
+        var modalOutput = '<div class="modal fade" id="' + characterResults[i].id + 'Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">\n' +
             '<div class="modal-dialog" role="document">\n' +
             '<div class="modal-content">\n' +
             '<div class="modal-header">\n' +
@@ -135,10 +140,10 @@ function processCharacterSearch(characterResult) {
             '<ol>';
 
         var comicLen = characterResults[i].comics.items.length;
-        if (comicLen === 0) output += '<p>Sorry, No Comics Available</p>';
+        if (comicLen === 0) modalOutput += '<p>Sorry, No Comics Available</p>';
         else {
             for (var x = 0; x < comicLen; x++) {
-                output +=
+                modalOutput +=
                     '<div class="row">' +
                     '<div class="col-sm-8"> ' +
                     '<li>' +
@@ -160,11 +165,11 @@ function processCharacterSearch(characterResult) {
 
 
         var eventLen = characterResults[i].events.items.length;
-        if (eventLen === 0) output += '<p>Sorry, No Events Available</p>';
+        if (eventLen === 0) modalOutput += '<p>Sorry, No Events Available</p>';
         else {
             if (eventLen > 5) eventLen = 5;
             for (var y = 0; y < eventLen; y++) {
-                output += '<div class="row">' +
+                modalOutput += '<div class="row">' +
                     '<div class="col-sm-8"> ' +
                     '<li>' +
                     '<p>' + characterResults[i].events.items[y].name + '</p>' +
@@ -178,7 +183,7 @@ function processCharacterSearch(characterResult) {
             }
         }
 
-        output += '</ol>' +
+        modalOutput += '</ol>' +
             '</div>\n' +
             '<div class="modal-footer">\n' +
             '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\n' +
@@ -189,8 +194,9 @@ function processCharacterSearch(characterResult) {
 
     }
     output += '<div id="info" class="col-sm-4">' +
-        '</div>' +
-        '</ul>';
+        '</div>'
+        + modalOutput +
+        '</div>';
     $('#results').append(output);
 }
 
@@ -213,7 +219,6 @@ function processSearch(searchResults) {
         '</div>\n' +
         '<div class="modal-footer">\n' +
         '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\n' +
-        '</div>\n' +
         '</div>\n' +
         '</div>\n' +
         '</div>';
