@@ -162,7 +162,7 @@ function processCharacterSearch(characterResult) {
         var eventLen = characterResults[i].events.items.length;
         if (eventLen === 0) output += '<p>Sorry, No Events Available</p>';
         else {
-            if (eventLen > 5) eventLen = 5;
+            if (eventLen > 10) eventLen = 10;
             for (var y = 0; y < eventLen; y++) {
                 output += '<div class="row">' +
                     '<div class="col-sm-8"> ' +
